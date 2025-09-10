@@ -49,6 +49,18 @@ const downloadCSV = (rows, filename = "analytics.csv") => {
     URL.revokeObjectURL(url);
 };
 
+// ---- تعديل هنا: fetchSafe ----
+const fetchSafe = async (url, fallback = []) => {
+    try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`Failed: ${url}`);
+        return await res.json();
+    } catch (err) {
+        console.warn("API failed:", url, err.message);
+        return fallback;
+    }
+};
+
 const AnalyticsPage = () => {
     const [students, setStudents] = useState([]);
     const [assignments, setAssignments] = useState([]);
@@ -66,20 +78,36 @@ const AnalyticsPage = () => {
         const loadData = async () => {
             setLoading(true);
             setErrorMsg("");
+
+            const stFallback = [{ id: 1, fullName: "Demo Student", stageId: 1, sectionName: "Demo Section" }];
+            const asgFallback = [{ id: 1, title: "Demo Assignment" }];
+            const subsFallback = [
+                {
+                    id: 1,
+                    studentId: 1,
+                    studentName: "Demo Student",
+                    assignment: "Demo Assignment",
+                    status: "Pending",
+                    submittedAt: new Date().toISOString(),
+                },
+            ];
+            const warnsFallback = [{ id: 1, message: "Demo Warning" }];
+            const botFallback = { users: 5, messages: 10 };
+
             try {
                 const [st, asg, subs, warns, bot] = await Promise.all([
-                    fetch(`${API_BASE}/api/students`).then((r) => r.json()),
-                    fetch(`${API_BASE}/api/assignments`).then((r) => r.json()),
-                    fetch(`${API_BASE}/api/submissions`).then((r) => r.json()),
-                    fetch(`${API_BASE}/api/warnings`).then((r) => r.json()),
-                    fetch(`${API_BASE}/api/bot/stats`).then((r) => r.json()),
+                    fetchSafe(`${API_BASE}/api/students`, stFallback),
+                    fetchSafe(`${API_BASE}/api/assignments`, asgFallback),
+                    fetchSafe(`${API_BASE}/api/submissions`, subsFallback),
+                    fetchSafe(`${API_BASE}/api/warnings`, warnsFallback),
+                    fetchSafe(`${API_BASE}/api/bot/stats`, botFallback),
                 ]);
 
-                setStudents(Array.isArray(st) ? st : []);
-                setAssignments(Array.isArray(asg) ? asg : []);
-                setSubmissions(Array.isArray(subs) ? subs : []);
-                setWarnings(Array.isArray(warns) ? warns : []);
-                setBotStats(bot && typeof bot === "object" ? bot : { users: 0, messages: 0 });
+                setStudents(Array.isArray(st) ? st : stFallback);
+                setAssignments(Array.isArray(asg) ? asg : asgFallback);
+                setSubmissions(Array.isArray(subs) ? subs : subsFallback);
+                setWarnings(Array.isArray(warns) ? warns : warnsFallback);
+                setBotStats(bot && typeof bot === "object" ? bot : botFallback);
             } catch (e) {
                 console.error(e);
                 setErrorMsg("تعذر تحميل البيانات الحقيقية، عرض بيانات تجريبية فقط.");

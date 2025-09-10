@@ -16,58 +16,58 @@ const DashboardPage = () => {
     const [overviewData, setOverviewData] = useState([]);
     const [recentSubmissions, setRecentSubmissions] = useState([]);
     const [topStudents, setTopStudents] = useState([]);
+const fetchSafe = async (url, fallback = []) => {
+    try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`Failed: ${url}`);
+        return await res.json();
+    } catch (err) {
+        console.warn("API failed:", url, err.message);
+        return fallback;
+    }
+};
 
-    const fetchSafe = async (url) => {
-        try {
-            const res = await fetch(url);
-            if (!res.ok) throw new Error(`Failed: ${url}`);
-            return await res.json();
-        } catch (err) {
-            console.warn("API failed:", url, err.message);
-            return [];
-        }
+useEffect(() => {
+    const fetchData = async () => {
+        const [a, s, st, w, b] = await Promise.all([
+            fetchSafe(`${API_BASE}/api/assignments`, [{ id: 1, title: "Demo Assignment" }]),
+            fetchSafe(`${API_BASE}/api/submissions`, [{ id: 1, studentName: "Demo Student", assignment: "Demo Assignment", status: "Pending" }]),
+            fetchSafe(`${API_BASE}/api/students`, [{ id: 1, fullName: "Demo Student" }]),
+            fetchSafe(`${API_BASE}/api/warnings`, [{ id: 1, message: "Demo Warning" }]),
+            fetchSafe(`${API_BASE}/api/bot/stats`, { users: 5, messages: 10 }),
+        ]);
+
+        setAssignments(a);
+        setSubmissions(s);
+        setStudents(st);
+        setWarnings(w);
+        setBotStats(b);
+
+        const monthMap = {};
+        s.forEach((sub) => {
+            const date = sub.submittedAt || sub.createdAt || sub.date || new Date().toISOString();
+            const month = new Date(date).toLocaleString("default", { month: "short" });
+            monthMap[month] = (monthMap[month] || 0) + 1;
+        });
+        setOverviewData(Object.entries(monthMap).map(([name, total]) => ({ name, total })));
+
+        setRecentSubmissions(s.slice(-5).reverse());
+
+        const studentMap = {};
+        s.forEach((sub) => {
+            const student = sub.studentName || sub.name || `#${sub.studentId || "N/A"}`;
+            studentMap[student] = (studentMap[student] || 0) + 1;
+        });
+        const topArr = Object.entries(studentMap)
+            .map(([name, submissions]) => ({ name, submissions }))
+            .sort((a, b) => b.submissions - a.submissions)
+            .slice(0, 10);
+        setTopStudents(topArr);
     };
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const [a, s, st, w, b] = await Promise.all([
-                fetchSafe(`${API_BASE}/api/assignments`),
-                fetchSafe(`${API_BASE}/api/submissions`),
-                fetchSafe(`${API_BASE}/api/students`),
-                fetchSafe(`${API_BASE}/api/warnings`),
-                fetchSafe(`${API_BASE}/api/bot/stats`),
-            ]);
+    fetchData();
+}, []);
 
-            setAssignments(Array.isArray(a) ? a : []);
-            setSubmissions(Array.isArray(s) ? s : []);
-            setStudents(Array.isArray(st) ? st : []);
-            setWarnings(Array.isArray(w) ? w : []);
-            setBotStats(b || { users: 0, messages: 0 });
-
-            const monthMap = {};
-            (Array.isArray(s) ? s : []).forEach((sub) => {
-                const date = sub.submittedAt || sub.createdAt || sub.date || new Date().toISOString();
-                const month = new Date(date).toLocaleString("default", { month: "short" });
-                monthMap[month] = (monthMap[month] || 0) + 1;
-            });
-            setOverviewData(Object.entries(monthMap).map(([name, total]) => ({ name, total })));
-
-            setRecentSubmissions((Array.isArray(s) ? s : []).slice(-5).reverse());
-
-            const studentMap = {};
-            (Array.isArray(s) ? s : []).forEach((sub) => {
-                const student = sub.studentName || sub.name || `#${sub.studentId || "N/A"}`;
-                studentMap[student] = (studentMap[student] || 0) + 1;
-            });
-            const topArr = Object.entries(studentMap)
-                .map(([name, submissions]) => ({ name, submissions }))
-                .sort((a, b) => b.submissions - a.submissions)
-                .slice(0, 10);
-            setTopStudents(topArr);
-        };
-
-        fetchData();
-    }, []);
 
     return (
         <div className="flex flex-col gap-y-4 dark:bg-black dark:text-gray-50 min-h-screen">

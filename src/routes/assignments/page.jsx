@@ -14,11 +14,17 @@ const AssignmentsPage = () => {
         loadAssignments();
     }, []);
 
-    const loadAssignments = () => {
-        fetch(`${API_BASE}/api/assignments`)
-            .then((res) => res.json())
-            .then((data) => setAssignments(data))
-            .catch((err) => console.error("❌ Error fetching assignments:", err));
+    const loadAssignments = async () => {
+        try {
+            const res = await fetch(`${API_BASE}/api/assignments`);
+            if (!res.ok) throw new Error("API unavailable");
+            const data = await res.json();
+            setAssignments(Array.isArray(data) ? data : []);
+        } catch (err) {
+            console.warn("❌ API failed, showing fallback:", err.message);
+            // fallback: مصفوفة فارغة لمنع أي خطأ
+            setAssignments([]);
+        }
     };
 
     const handleDelete = async () => {
@@ -30,10 +36,10 @@ const AssignmentsPage = () => {
             if (res.ok) {
                 setAssignments((prev) => prev.filter((a) => a.id !== selected.id));
             } else {
-                console.error("❌ Failed to delete assignment");
+                console.warn("❌ Failed to delete assignment, fallback skip");
             }
         } catch (err) {
-            console.error("❌ Error deleting:", err);
+            console.warn("❌ Error deleting, fallback skip:", err.message);
         }
         setConfirmOpen(false);
         setSelected(null);
@@ -53,28 +59,29 @@ const AssignmentsPage = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {assignments.map((a) => (
-                            <tr key={a.id}>
-                                <td>{a.title}</td>
-                                <td>{a.subjectName}</td>
-                                <td>{new Date(a.dueDate).toLocaleDateString()}</td>
-                                <td className="flex justify-center gap-2">
-                                    <button className="flex items-center gap-1 rounded-lg bg-blue-500 px-3 py-1 text-sm text-white transition hover:bg-blue-600">
-                                        <Pencil size={16} /> تعديل
-                                    </button>
-                                    <button
-                                        onClick={() => {
-                                            setSelected(a);
-                                            setConfirmOpen(true);
-                                        }}
-                                        className="flex items-center gap-1 rounded-lg bg-red-500 px-3 py-1 text-sm text-white transition hover:bg-red-600"
-                                    >
-                                        <Trash2 size={16} /> حذف
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                        {!assignments.length && (
+                        {assignments.length > 0 ? (
+                            assignments.map((a) => (
+                                <tr key={a.id}>
+                                    <td>{a.title}</td>
+                                    <td>{a.subjectName}</td>
+                                    <td>{new Date(a.dueDate).toLocaleDateString()}</td>
+                                    <td className="flex justify-center gap-2">
+                                        <button className="flex items-center gap-1 rounded-lg bg-blue-500 px-3 py-1 text-sm text-white transition hover:bg-blue-600">
+                                            <Pencil size={16} /> تعديل
+                                        </button>
+                                        <button
+                                            onClick={() => {
+                                                setSelected(a);
+                                                setConfirmOpen(true);
+                                            }}
+                                            className="flex items-center gap-1 rounded-lg bg-red-500 px-3 py-1 text-sm text-white transition hover:bg-red-600"
+                                        >
+                                            <Trash2 size={16} /> حذف
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
                             <tr>
                                 <td
                                     colSpan={4}
