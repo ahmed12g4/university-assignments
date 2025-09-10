@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 "use client";
 import { useState } from "react";
 
@@ -17,7 +18,7 @@ const AddStudentPage = () => {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
+        e.preventDefault(); // مهم منع إعادة التحميل
         setLoading(true);
         setMessage("");
 
@@ -47,8 +48,8 @@ const AddStudentPage = () => {
     };
 
     return (
-        <div className="flex min-h-screen flex-col gap-4 bg-gray-50 p-4 sm:p-6 md:p-8">
-            <h1 className="text-center text-3xl font-bold text-gray-900">🎓 Add Student</h1>
+        <div className="flex min-h-screen flex-col gap-4 bg-gray-50 p-4 transition-colors duration-300 dark:bg-gray-900 sm:p-6 md:p-8">
+            <h1 className="text-center text-3xl font-bold text-gray-900 dark:text-white">🎓 Add Student</h1>
 
             <form
                 onSubmit={handleSubmit}
@@ -60,7 +61,7 @@ const AddStudentPage = () => {
                     value={formData.fullName}
                     onChange={handleChange}
                     placeholder="Full Name"
-                    className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
                     required
                 />
                 <input
@@ -69,7 +70,7 @@ const AddStudentPage = () => {
                     value={formData.username}
                     onChange={handleChange}
                     placeholder="Username"
-                    className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
                 />
                 <input
                     type="email"
@@ -77,7 +78,7 @@ const AddStudentPage = () => {
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="Email"
-                    className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
                     required
                 />
 
@@ -86,7 +87,7 @@ const AddStudentPage = () => {
                         name="stageId"
                         value={formData.stageId}
                         onChange={handleChange}
-                        className="flex-1 rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="flex-1 rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
                     >
                         <option value="">Select Stage</option>
                         <option value="1">الصف الأول الثانوي</option>
@@ -98,7 +99,7 @@ const AddStudentPage = () => {
                         name="sectionId"
                         value={formData.sectionId}
                         onChange={handleChange}
-                        className="flex-1 rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="flex-1 rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
                     >
                         <option value="">Select Section</option>
                         <option value="1">قسم A</option>
@@ -110,13 +111,13 @@ const AddStudentPage = () => {
                 <button
                     type="submit"
                     disabled={loading}
-                    className="w-full rounded-lg bg-blue-600 px-4 py-2 font-semibold text-white transition hover:bg-blue-700"
+                    className="w-full rounded-lg bg-blue-600 px-4 py-2 font-semibold text-white transition-colors duration-300 hover:bg-blue-700"
                 >
                     {loading ? "Saving..." : "Save"}
                 </button>
             </form>
 
-            {message && <p className="mt-2 text-center font-medium text-gray-700">{message}</p>}
+            {message && <p className="mt-2 text-center font-medium text-gray-700 transition-colors duration-300 dark:text-gray-300">{message}</p>}
         </div>
     );
 };

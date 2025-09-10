@@ -74,16 +74,16 @@ const AddSubjectPage = () => {
     };
 
     return (
-        <div className="flex min-h-screen flex-col bg-black px-4 py-6 text-gray-50 sm:px-6 lg:px-8">
+        <div className="flex min-h-screen flex-col bg-gray-50 px-4 py-6 text-gray-900 transition-colors duration-300 dark:bg-gray-900 dark:text-gray-50 sm:px-6 lg:px-8">
             <h1 className="mb-8 text-center text-3xl font-bold">📘 إدارة المواد</h1>
 
             {/* Form Section */}
             <div className="mx-auto flex w-full max-w-3xl flex-col gap-6">
-                <div className="rounded-lg bg-gray-900 p-6 shadow-md">
+                <div className="rounded-lg bg-white p-6 shadow-md transition-colors duration-300 dark:bg-gray-800">
                     <h2 className="mb-4 flex items-center gap-2 text-xl font-semibold">
                         <BookOpen
                             size={24}
-                            className="text-yellow-400"
+                            className="text-blue-400"
                         />
                         إضافة مادة جديدة
                     </h2>
@@ -97,27 +97,27 @@ const AddSubjectPage = () => {
                             placeholder="اسم المادة"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            className="w-full rounded-md border border-gray-600 bg-gray-800 px-4 py-2 text-gray-50 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                            className="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-gray-900 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-50"
                             required
                         />
                         <textarea
                             placeholder="الوصف"
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
-                            className="min-h-[80px] w-full rounded-md border border-gray-600 bg-gray-800 px-4 py-2 text-gray-50 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                            className="min-h-[80px] w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-gray-900 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-50"
                         />
                         <div className="flex flex-col gap-3 sm:flex-row">
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="flex-1 rounded-md bg-yellow-600 py-2 font-semibold text-black transition hover:bg-yellow-700"
+                                className="flex-1 rounded-md bg-blue-600 py-2 font-semibold text-white transition-colors duration-300 hover:bg-blue-700 dark:text-gray-50"
                             >
                                 {loading ? "جاري الحفظ..." : "حفظ"}
                             </button>
                             <button
                                 type="button"
                                 onClick={clearInputs}
-                                className="flex flex-1 items-center justify-center gap-2 rounded-md bg-gray-700 py-2 font-medium text-gray-200 transition hover:bg-gray-600"
+                                className="flex flex-1 items-center justify-center gap-2 rounded-md bg-red-500 py-2 font-medium text-white transition-colors duration-300 hover:bg-red-600"
                             >
                                 <Trash2 size={16} /> مسح
                             </button>
@@ -126,32 +126,32 @@ const AddSubjectPage = () => {
                 </div>
 
                 {/* Subjects List */}
-                <div className="rounded-lg bg-gray-900 p-6 shadow-md">
+                <div className="rounded-lg bg-white p-6 shadow-md transition-colors duration-300 dark:bg-gray-800">
                     <h2 className="mb-4 text-xl font-semibold">قائمة المواد</h2>
                     {subjects.length === 0 ? (
-                        <p className="text-center text-gray-400">لا توجد مواد بعد</p>
+                        <p className="text-center text-gray-400 dark:text-gray-300">لا توجد مواد بعد</p>
                     ) : (
                         <ul className="grid gap-3 sm:grid-cols-2">
                             {subjects.map((subj) => (
                                 <li
                                     key={subj.id}
-                                    className="flex flex-col items-start gap-2 rounded-md bg-gray-800 p-4 shadow sm:flex-row sm:items-center sm:justify-between"
+                                    className="flex flex-col items-start gap-2 rounded-md bg-gray-100 p-4 shadow transition-colors duration-300 dark:bg-gray-900 sm:flex-row sm:items-center sm:justify-between"
                                 >
                                     <div className="flex items-center gap-2">
                                         <BookOpen
-                                            className="text-yellow-400"
+                                            className="text-blue-400"
                                             size={18}
                                         />
                                         <span>{subj.name}</span>
                                     </div>
                                     <div className="flex flex-wrap items-center gap-2">
-                                        <span className="text-gray-300">{subj.description || "—"}</span>
+                                        <span className="text-gray-600 dark:text-gray-300">{subj.description || "—"}</span>
                                         <button
                                             onClick={() => {
                                                 setSelectedSubject(subj);
                                                 setConfirmOpen(true);
                                             }}
-                                            className="flex items-center gap-1 rounded-md bg-red-500 px-3 py-1 text-sm text-white transition hover:bg-red-600"
+                                            className="flex items-center gap-1 rounded-md bg-red-500 px-3 py-1 text-sm text-white transition-colors duration-300 hover:bg-red-600"
                                         >
                                             <Trash2 size={16} /> حذف
                                         </button>

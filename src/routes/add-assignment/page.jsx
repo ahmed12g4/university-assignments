@@ -48,7 +48,7 @@ const AddStudentPage = () => {
     };
 
     return (
-        <div className="flex min-h-screen flex-col gap-4 bg-black p-4 text-gray-50 sm:p-6 md:p-8">
+        <div className="flex min-h-screen flex-col gap-4 bg-gray-50 p-4 text-gray-900 transition-colors duration-300 dark:bg-gray-900 dark:text-gray-50 sm:p-6 md:p-8">
             <h1 className="text-center text-3xl font-bold">🎓 إضافة طالب</h1>
 
             <form
@@ -61,7 +61,7 @@ const AddStudentPage = () => {
                     value={formData.fullName}
                     onChange={handleChange}
                     placeholder="Full Name"
-                    className="w-full rounded-lg border border-gray-600 bg-gray-800 px-4 py-2 text-gray-50 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                    className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-50"
                     required
                 />
                 <input
@@ -70,7 +70,7 @@ const AddStudentPage = () => {
                     value={formData.username}
                     onChange={handleChange}
                     placeholder="Username"
-                    className="w-full rounded-lg border border-gray-600 bg-gray-800 px-4 py-2 text-gray-50 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                    className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-50"
                 />
                 <input
                     type="email"
@@ -78,7 +78,7 @@ const AddStudentPage = () => {
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="Email"
-                    className="w-full rounded-lg border border-gray-600 bg-gray-800 px-4 py-2 text-gray-50 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                    className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-50"
                     required
                 />
 
@@ -87,7 +87,7 @@ const AddStudentPage = () => {
                         name="stageId"
                         value={formData.stageId}
                         onChange={handleChange}
-                        className="flex-1 rounded-lg border border-gray-600 bg-gray-800 px-4 py-2 text-gray-50 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                        className="flex-1 rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-50"
                     >
                         <option value="">Select Stage</option>
                         <option value="1">الصف الأول الثانوي</option>
@@ -99,7 +99,7 @@ const AddStudentPage = () => {
                         name="sectionId"
                         value={formData.sectionId}
                         onChange={handleChange}
-                        className="flex-1 rounded-lg border border-gray-600 bg-gray-800 px-4 py-2 text-gray-50 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                        className="flex-1 rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-50"
                     >
                         <option value="">Select Section</option>
                         <option value="1">قسم A</option>
@@ -111,13 +111,13 @@ const AddStudentPage = () => {
                 <button
                     type="submit"
                     disabled={loading}
-                    className="w-full rounded-lg bg-yellow-600 px-4 py-2 font-semibold text-black transition hover:bg-yellow-700"
+                    className="w-full rounded-lg bg-blue-600 px-4 py-2 font-semibold text-white transition-colors duration-300 hover:bg-blue-700 dark:text-gray-50"
                 >
                     {loading ? "Saving..." : "Save"}
                 </button>
             </form>
 
-            {message && <p className="mt-2 text-center font-medium">{message}</p>}
+            {message && <p className="mt-2 text-center font-medium transition-colors duration-300">{message}</p>}
 
             <Footer />
         </div>
