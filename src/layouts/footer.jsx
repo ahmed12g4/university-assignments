@@ -8,7 +8,7 @@ export const Footer = () => {
             <p className="footer-copyright">
                 &copy; 2025 | All rights reserved. Made by{" "}
                 <a
-                    href="https://ahmed12g4.github.io/My-Portfolio/"
+                    href="https://ahmed12g4.github.io/Portfolio1/"
                     target="_blank"
                     rel="noreferrer"
                 >
