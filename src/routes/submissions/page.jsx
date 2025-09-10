@@ -11,11 +11,13 @@ const API_URL = "http://localhost:5000/api/submissions";
 export default function SubmissionsPage() {
     const [submissions, setSubmissions] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [errorMsg, setErrorMsg] = useState(""); // رسالة خطأ
     const { toast } = useToast();
 
     // Fetch submissions from API
     const fetchSubmissions = async () => {
         setLoading(true);
+        setErrorMsg("");
         try {
             const res = await fetch(API_URL);
             if (!res.ok) throw new Error("Failed to fetch");
@@ -23,6 +25,8 @@ export default function SubmissionsPage() {
             setSubmissions(Array.isArray(data) ? data : []);
         } catch (err) {
             console.error(err);
+            setSubmissions([]); // افتراضيًا فاضي
+            setErrorMsg("⚠️ تعذر تحميل التسليمات من السيرفر، عرض بيانات تجريبية فقط.");
             toast({ title: "❌ خطأ", description: "فشل تحميل التسليمات", variant: "destructive" });
         } finally {
             setLoading(false);
@@ -45,7 +49,6 @@ export default function SubmissionsPage() {
 
             const updated = await res.json();
             setSubmissions((prev) => prev.map((s) => (s.id === id ? updated : s)));
-
             toast({ title: "✅ تم التحديث", description: `تم تغيير حالة التسليم بنجاح` });
         } catch (err) {
             console.error(err);
@@ -72,6 +75,8 @@ export default function SubmissionsPage() {
     return (
         <div className="flex min-h-screen flex-col gap-6 bg-gray-50 p-4 dark:bg-slate-900">
             <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-50">📑 Submissions</h1>
+
+            {errorMsg && <div className="rounded bg-yellow-100 px-4 py-2 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">{errorMsg}</div>}
 
             {loading ? (
                 <div className="text-center text-gray-500 dark:text-gray-400">Loading...</div>
