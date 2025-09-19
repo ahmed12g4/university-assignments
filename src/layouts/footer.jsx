@@ -8,7 +8,7 @@ export const Footer = () => {
             <p className="footer-copyright">
                 &copy; 2025 | All rights reserved. Made by{" "}
                 <a
-                    href="https://ahmed12g4.github.io/Portfolio1/"
+                    href="https://portfolio-chi-nine-90.vercel.app/"
                     target="_blank"
                     rel="noreferrer"
                 >
